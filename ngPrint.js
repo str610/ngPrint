@@ -35,6 +35,26 @@
             window.onafterprint = afterPrint;
         }
 
+        function cloneCanvas(oldCanvas) {
+            var newCanvas = document.createElement('canvas');
+            var context = newCanvas.getContext('2d');
+            newCanvas.width = oldCanvas.width;
+            newCanvas.height = oldCanvas.height;
+            context.drawImage(oldCanvas, 0, 0);
+            return newCanvas;
+        }
+
+        function cloneNode(element) {
+            var newElement = element.cloneNode(true);
+
+            var nweChildCanvas = newElement.querySelectorAll('canvas');
+            var oldChildCanvas = element.querySelectorAll('canvas');
+            for (var i = 0; i < oldChildCanvas.length; i++) {
+                nweChildCanvas[i].parentNode.replaceChild(cloneCanvas(oldChildCanvas[i]), nweChildCanvas[i]);
+            }
+            return newElement;
+        }
+
         function afterPrint() {
             // clean the print section before adding new content
             printSection.innerHTML = '';
@@ -42,7 +62,7 @@
 
         function printElement(elem) {
             // clones the element you want to print
-            var domClone = elem.cloneNode(true);
+            var domClone = cloneNode(true);
             printSection.innerHTML = '';
             printSection.appendChild(domClone);
             window.print();
