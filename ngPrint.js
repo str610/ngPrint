@@ -62,7 +62,7 @@
 
         function printElement(elem) {
             // clones the element you want to print
-            var domClone = cloneNode(true);
+            var domClone = cloneNode(elem);
             printSection.innerHTML = '';
             printSection.appendChild(domClone);
             window.print();
